@@ -32,7 +32,19 @@ notesDisplay.addEventListener('click', (e) => {
             break;
 
         case 'pinned':
+            // dout;
+            // arrayOfNotes = arrayOfNotes.map(({_id,isPinned}) => _id.toString()===noteId ? {...note,isPinned:!isPinned}:note);
+            // console.log(arrayOfNotes);
+            // console.log("\n");
+            // arrayOfNotes = arrayOfNotes.map(note => note._id.toString() === noteId ? {...note,isPinned: !note.isPinned} : note);
 
+            for (let i = 0; i < arrayOfNotes.length; i++) {
+                if (arrayOfNotes[i]._id == noteId) {
+                    arrayOfNotes[i].isPinned = !arrayOfNotes[i].isPinned;
+                }
+            }
+
+        case 'pinned':
             // dout;
             // arrayOfNotes = arrayOfNotes.map(({_id,isPinned}) => _id.toString()===noteId ? {...note,isPinned:!isPinned}:note);
             // console.log(arrayOfNotes);
@@ -49,6 +61,22 @@ notesDisplay.addEventListener('click', (e) => {
             showPinnedNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isPinned }) => isPinned));
             localStorage.setItem("notes", JSON.stringify(arrayOfNotes));
             break;
+
+        case "archived":
+            // dout
+            // arrayOfNotes = arrayOfNotes.map(note => note.id.toString() === noteId ? {
+            //     ...note,
+            //     isArchived: !note.isArchived
+            // } : note);
+
+            for (let i = 0; i < arrayOfNotes.length; i++) {
+                if (arrayOfNotes[i]._id == noteId) {
+                    arrayOfNotes[i].isArchived = !arrayOfNotes[i].isArchived;
+                }
+            }
+            showOtherNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isArchived }) => !isArchived));
+            localStorage.setItem('notes', JSON.stringify(arrayOfNotes));
+
     }
 
 
@@ -67,7 +95,12 @@ addNoteButton.addEventListener('click', () => {
         localStorage.setItem("notes", JSON.stringify(arrayOfNotes));   // JSON.stringfy is used to converted object into string in local storage.
     }
 })
-showOtherNotes.innerHTML = renderNotes(arrayOfNotes);
+
+showOtherNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isPinned, isArchived }) => !isArchived && !isPinned));
+showPinnedNotes.innerHTML = renderNotes(arrayOfNotes.filter(({
+    isPinned
+}) => isPinned));
+
 
 
 
