@@ -25,7 +25,7 @@ notesDisplay.addEventListener('click', (e) => {
         case 'del':
             arrayOfNotes = arrayOfNotes.filter(({ _id }) => _id.toString() != noteId);
             // console.log(arrayOfNotes);
-            showOtherNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isPinned }) => !isPinned));
+            showOtherNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isPinned,isArchived }) => !isPinned && !isArchived));
             showPinnedNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isPinned }) => isPinned));
 
             localStorage.setItem('notes', JSON.stringify(arrayOfNotes));
@@ -44,21 +44,8 @@ notesDisplay.addEventListener('click', (e) => {
                 }
             }
 
-        case 'pinned':
-            // dout;
-            // arrayOfNotes = arrayOfNotes.map(({_id,isPinned}) => _id.toString()===noteId ? {...note,isPinned:!isPinned}:note);
-            // console.log(arrayOfNotes);
-            // console.log("\n");
-            // arrayOfNotes = arrayOfNotes.map(note => note._id.toString() === noteId ? {...note,isPinned: !note.isPinned} : note);
-
-            for (let i = 0; i < arrayOfNotes.length; i++) {
-                if (arrayOfNotes[i]._id == noteId) {
-                    arrayOfNotes[i].isPinned = !arrayOfNotes[i].isPinned;
-                }
-            }
-
-            showOtherNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isPinned }) => !isPinned));
-            showPinnedNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isPinned }) => isPinned));
+            showOtherNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isPinned,isArchived }) => !isPinned && !isArchived));
+            showPinnedNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isPinned,isArchived }) => isPinned && !isArchived));
             localStorage.setItem("notes", JSON.stringify(arrayOfNotes));
             break;
 
@@ -74,9 +61,10 @@ notesDisplay.addEventListener('click', (e) => {
                     arrayOfNotes[i].isArchived = !arrayOfNotes[i].isArchived;
                 }
             }
-            showOtherNotes.innerHTML = renderNotes(arrayOfNotes.filter(({ isArchived }) => !isArchived));
+            showOtherNotes.innerHTML  = renderNotes(arrayOfNotes.filter(({ isArchived,isPinned }) => !isArchived && !isPinned));
+            showPinnedNotes.innerHTML = renderNotes(arrayOfNotes.filter(({isPinned,isArchived}) => isPinned && !isArchived ));
             localStorage.setItem('notes', JSON.stringify(arrayOfNotes));
-
+            break;
     }
 
 
@@ -91,7 +79,7 @@ addNoteButton.addEventListener('click', () => {
         // console.log(arrayOfNotes);
 
         title.value = note.value = "";
-        showOtherNotes.innerHTML = renderNotes(arrayOfNotes);
+        showOtherNotes.innerHTML = renderNotes(arrayOfNotes.filter(({isPinned,isArchived}) => !isPinned && !isArchived));
         localStorage.setItem("notes", JSON.stringify(arrayOfNotes));   // JSON.stringfy is used to converted object into string in local storage.
     }
 })
